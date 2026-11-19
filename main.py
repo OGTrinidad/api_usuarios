@@ -1,7 +1,7 @@
+
 from fastapi import FastAPI
 
 app = FastAPI()
-
 
 usuarios = []
 
@@ -20,8 +20,8 @@ def listar_usuarios():
 
 
 @app.post("/usuarios")
-def crear_usuario(nombre: str):
-    usuario = {"nombre": nombre}
+def crear_usuario(nombre: str, edad: int):
+    usuario = {"nombre": nombre, "edad": edad}
     usuarios.append(usuario)
     return usuario
 
