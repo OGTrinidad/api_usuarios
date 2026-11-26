@@ -1,11 +1,18 @@
 
 from fastapi import FastAPI
+from pydantic import BaseModel
 import json
 import os
 
 app = FastAPI()
 
 ARCHIVO = "usuarios.json"
+
+
+# Modelo de datos de un usuario
+class Usuario(BaseModel):
+    nombre: str
+    edad: int
 
 
 # Cargar usuarios desde el archivo JSON
@@ -22,7 +29,6 @@ def guardar_usuarios():
         json.dump(usuarios, f, indent=4, ensure_ascii=False)
 
 
-# Cargar los usuarios al iniciar la aplicación
 usuarios = cargar_usuarios()
 
 
@@ -40,11 +46,11 @@ def listar_usuarios():
 
 
 @app.post("/usuarios")
-def crear_usuario(nombre: str, edad: int):
-    usuario = {"nombre": nombre, "edad": edad}
-    usuarios.append(usuario)
+def crear_usuario(usuario: Usuario):
+    datos = usuario.model_dump()
+    usuarios.append(datos)
     guardar_usuarios()
-    return usuario
+    return datos
 
 
 @app.delete("/usuarios/{nombre}")
